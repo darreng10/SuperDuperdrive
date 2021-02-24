@@ -27,10 +27,18 @@ public class NoteController {
         Integer userid = user.getUserId();
         note.setUserid(userid);
 
+        if (noteService.doesNoteExist(note.getNotetitle(), note.getNotedescription(),userid)) {
+
+            model.addAttribute("success", false);
+            model.addAttribute("error", true);
+            model.addAttribute("message", "note already exists");
+            return new ModelAndView("result");
+        }
+
         try {
-            if (note.getNoteid() == null) {
+            if (note.getNoteid() == null){
                 noteService.createNote(note);
-            } else {
+            }else {
                 noteService.editNote(note);
             }
             model.addAttribute("success", true);
